@@ -8,7 +8,10 @@
 import UIKit
 import WebKit
 
+
 class AuthViewController: UIViewController {
+    
+    var session = Session.shared
     @IBOutlet weak var webView: WKWebView! {
         didSet {
             webView.navigationDelegate = self
@@ -17,6 +20,8 @@ class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+      
         
         //oauthAuthorizationToVK
         authorizeToVK()
@@ -66,10 +71,11 @@ class AuthViewController: UIViewController {
                 return dict
             }
         //TODO: Отслеживать протухание токена
-        if  let token = params["access_token"], let userId = params["user_id"] {
+        if  let token = params["access_token"], let userId = params["user_id"], let expiresIn = params["expires_in"] {
             print("TOKEN = ", token as Any)
-            Session.shared.token = token
-            Session.shared.userId = userId
+            self.session.token = token
+            self.session.userId = Int(userId) ?? 0
+            self.session.expiredDate = Date(timeIntervalSinceNow: TimeInterval(Int(expiresIn) ?? 0))
             
             showMainTabBar()
             

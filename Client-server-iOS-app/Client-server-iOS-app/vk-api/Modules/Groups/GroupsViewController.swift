@@ -9,13 +9,13 @@ import UIKit
 
 class GroupsViewController: UITableViewController {
     
-    let apiService = APIService()
+//    let apiService = APIService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        apiService.getGroupsUser {groups in
-            print(groups)
-        }
+//        apiService.getGroupsUser {groups in
+//            print(groups)
+//        }
     }
 }
