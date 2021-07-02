@@ -19,6 +19,12 @@
 		110101F1268B3267007EEB78 /* FriendsViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110101F0268B3267007EEB78 /* FriendsViewController2.swift */; };
 		110101F4268B39F0007EEB78 /* FriendsPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110101F3268B39F0007EEB78 /* FriendsPhotosViewController.swift */; };
 		110101F6268B3C63007EEB78 /* LikeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110101F5268B3C63007EEB78 /* LikeButtonView.swift */; };
+		11053AE2268E05D10083BD23 /* GroupsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11053AE1268E05D10083BD23 /* GroupsTableViewCell.swift */; };
+		11053AE5268E0AC10083BD23 /* NewGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11053AE4268E0AC10083BD23 /* NewGroupTableViewCell.swift */; };
+		11053AE7268E0AD30083BD23 /* NewGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11053AE6268E0AD30083BD23 /* NewGroupsTableViewController.swift */; };
+		11053AE9268E0FE40083BD23 /* UIImageView + load URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11053AE8268E0FE40083BD23 /* UIImageView + load URL.swift */; };
+		11053AEC268E11F10083BD23 /* CustomNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11053AEB268E11F10083BD23 /* CustomNavigationViewController.swift */; };
+		11053AEF268F14470083BD23 /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11053AEE268F14470083BD23 /* FeedTableViewCell.swift */; };
 		111EE3AB26848085006E312E /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE3AA26848085006E312E /* Friends.swift */; };
 		111EE3AF268490A2006E312E /* GroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE3AE268490A2006E312E /* GroupsViewController.swift */; };
 		111EE3B2268490B1006E312E /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE3B1268490B1006E312E /* FeedViewController.swift */; };
@@ -55,6 +61,12 @@
 		110101F0268B3267007EEB78 /* FriendsViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController2.swift; sourceTree = "<group>"; };
 		110101F3268B39F0007EEB78 /* FriendsPhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsPhotosViewController.swift; sourceTree = "<group>"; };
 		110101F5268B3C63007EEB78 /* LikeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButtonView.swift; sourceTree = "<group>"; };
+		11053AE1268E05D10083BD23 /* GroupsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsTableViewCell.swift; sourceTree = "<group>"; };
+		11053AE4268E0AC10083BD23 /* NewGroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupTableViewCell.swift; sourceTree = "<group>"; };
+		11053AE6268E0AD30083BD23 /* NewGroupsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupsTableViewController.swift; sourceTree = "<group>"; };
+		11053AE8268E0FE40083BD23 /* UIImageView + load URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + load URL.swift"; sourceTree = "<group>"; };
+		11053AEB268E11F10083BD23 /* CustomNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationViewController.swift; sourceTree = "<group>"; };
+		11053AEE268F14470083BD23 /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		111EE3AA26848085006E312E /* Friends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
 		111EE3AE268490A2006E312E /* GroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsViewController.swift; sourceTree = "<group>"; };
 		111EE3B1268490B1006E312E /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +123,39 @@
 			path = PhotoFriendFullSize;
 			sourceTree = "<group>";
 		};
+		11053AE0268E05B70083BD23 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				11053AE1268E05D10083BD23 /* GroupsTableViewCell.swift */,
+				11053AE4268E0AC10083BD23 /* NewGroupTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		11053AE3268E0AA80083BD23 /* NewGroups */ = {
+			isa = PBXGroup;
+			children = (
+				11053AE6268E0AD30083BD23 /* NewGroupsTableViewController.swift */,
+			);
+			path = NewGroups;
+			sourceTree = "<group>";
+		};
+		11053AEA268E11C00083BD23 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				11053AEB268E11F10083BD23 /* CustomNavigationViewController.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		11053AED268F142E0083BD23 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				11053AEE268F14470083BD23 /* FeedTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		111EE3AC2684808C006E312E /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +171,8 @@
 			isa = PBXGroup;
 			children = (
 				111EE3AE268490A2006E312E /* GroupsViewController.swift */,
+				11053AE3268E0AA80083BD23 /* NewGroups */,
+				11053AE0268E05B70083BD23 /* Cell */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -134,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				111EE3B1268490B1006E312E /* FeedViewController.swift */,
+				11053AED268F142E0083BD23 /* Cell */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -163,9 +211,8 @@
 			isa = PBXGroup;
 			children = (
 				1134DB272682549C0052DDFE /* Info.plist */,
-				111EE3B3268496E4006E312E /* То что черновики */,
-				11D7756B26825EAA00CEB07B /* Extension */,
 				1134DB182682549A0052DDFE /* vk-api */,
+				111EE3B3268496E4006E312E /* То что черновики */,
 				0DA5974E77931859943D95EC /* Pods */,
 				4CFB0B0B21BC99CA183ACB18 /* Frameworks */,
 			);
@@ -183,9 +230,10 @@
 		1134DB182682549A0052DDFE /* vk-api */ = {
 			isa = PBXGroup;
 			children = (
-				1134DB34268255440052DDFE /* Services */,
 				1134DB31268254F90052DDFE /* App */,
+				1134DB34268255440052DDFE /* Services */,
 				1134DB332682553A0052DDFE /* Modules */,
+				11D7756B26825EAA00CEB07B /* Extension */,
 				1134DB32268255100052DDFE /* Resources */,
 			);
 			path = "vk-api";
@@ -233,6 +281,7 @@
 		1134DB332682553A0052DDFE /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				11053AEA268E11C00083BD23 /* Navigation */,
 				111EE3AC2684808C006E312E /* Model */,
 				1134DB30268254E60052DDFE /* Friends */,
 				1194C7402688FE83000F9821 /* View's */,
@@ -279,6 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				11D7756C26825EC800CEB07B /* Data+prettyJSON.swift */,
+				11053AE8268E0FE40083BD23 /* UIImageView + load URL.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -410,10 +460,15 @@
 				110101EC268A5717007EEB78 /* Feed.swift in Sources */,
 				110101F1268B3267007EEB78 /* FriendsViewController2.swift in Sources */,
 				1134DB382682558A0052DDFE /* FriendsViewController.swift in Sources */,
+				11053AEC268E11F10083BD23 /* CustomNavigationViewController.swift in Sources */,
+				11053AE9268E0FE40083BD23 /* UIImageView + load URL.swift in Sources */,
 				110101E0268A53EF007EEB78 /* GetGroup.swift in Sources */,
+				11053AE7268E0AD30083BD23 /* NewGroupsTableViewController.swift in Sources */,
+				11053AEF268F14470083BD23 /* FeedTableViewCell.swift in Sources */,
 				111EE3B92684A020006E312E /* PhotoForGet.swift in Sources */,
 				1194C73D2688FD48000F9821 /* FriendsTableViewCell.swift in Sources */,
 				110101DE268A53DE007EEB78 /* GetPhotoFriend.swift in Sources */,
+				11053AE5268E0AC10083BD23 /* NewGroupTableViewCell.swift in Sources */,
 				1194C74626890B37000F9821 /* PhotoCollectionViewCell.swift in Sources */,
 				111EE3B2268490B1006E312E /* FeedViewController.swift in Sources */,
 				1194C7422688FE9F000F9821 /* AvatarView.swift in Sources */,
@@ -430,6 +485,7 @@
 				11D7756D26825EC800CEB07B /* Data+prettyJSON.swift in Sources */,
 				1134DB1C2682549A0052DDFE /* SceneDelegate.swift in Sources */,
 				111EE3AF268490A2006E312E /* GroupsViewController.swift in Sources */,
+				11053AE2268E05D10083BD23 /* GroupsTableViewCell.swift in Sources */,
 				110101E4268A5410007EEB78 /* RealmOperation.swift in Sources */,
 				110101E6268A5690007EEB78 /* Friend2.swift in Sources */,
 				111EE3B726849A9F006E312E /* Groups.swift in Sources */,

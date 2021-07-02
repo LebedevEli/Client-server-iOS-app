@@ -15,7 +15,11 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var friendsTableView: UITableView!
     
+
+    
     override func viewDidLoad() {
+        
+        tableView.refreshControl = myRefreshControl
         super.viewDidLoad()
         
         loadFriendsFromRealm() // загрузка данных из реалма (кэш) для первоначального отображения
@@ -34,12 +38,18 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     var letersOfNames: [String] = []
     
     
+    //RefreshControl
+    let myRefreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
+        return refreshControl
+    }()
+    
     // MARK: - Table view
     
     // количество секций
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return letersOfNames.count
-//        return 20
+      return letersOfNames.count
     }
     
     // настройка хедера ячеек и добавление букв в него
@@ -174,6 +184,13 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             }
         }
         return ownerIDs
+    }
+    //MARK: - рефреш контрол (обновление страницы)
+    @objc private func refresh(sender: UIRefreshControl) {
+//        let str = "This is \(letersOfNames.count) line"
+//        letersOfNames.append(str)
+//        tableView.reloadData()
+        sender.endRefreshing()
     }
     
     

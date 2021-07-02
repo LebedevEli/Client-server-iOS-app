@@ -11,5 +11,6 @@ pod 'Alamofire'
 pod 'SwiftKeychainWrapper'
 pod 'RealmSwift'
 pod 'Kingfisher'
+pod 'DynamicJSON'
 
 end

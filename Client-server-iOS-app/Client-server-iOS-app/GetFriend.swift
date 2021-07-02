@@ -67,7 +67,7 @@ class GetFriendsList {
             URLQueryItem(name: "user_id", value: String(Session.shared.userId)),
             URLQueryItem(name: "fields", value: "photo_50"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
-            URLQueryItem(name: "v", value: "5.21")
+            URLQueryItem(name: "v", value: "5.131")
         ]
         
         // задача для запуска
@@ -102,18 +102,6 @@ class GetFriendsList {
         }
         task.resume()
     }
-    
-    //    func saveFriendsToRealm(_ friendList: [Friend]) {
-    //        do {
-    //            let realm = try Realm()
-    //            try realm.write{
-    //                realm.add(friendList)
-    //            }
-    //        } catch {
-    //            print(error)
-    //        }
-    //    }
-    
     
 }
 
