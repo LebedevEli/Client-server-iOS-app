@@ -17,12 +17,7 @@ class GroupsViewController: UITableViewController {
         tableView.refreshControl = myRefreshControl
 
         //получение данного JSON
-        GetGroupsList().loadData() { [weak self] (complition) in
-            DispatchQueue.main.async {
-                self?.myGroups = complition
-                self?.tableView.reloadData()
-            }
-        }
+        GetGroupsList().loadData()
     }
     
     var myGroups: [Group] = []

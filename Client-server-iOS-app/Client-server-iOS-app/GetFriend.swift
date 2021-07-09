@@ -51,7 +51,7 @@ struct FriendsResponse: Decodable {
 class GetFriendsList {
     
     //данные для авторизации в ВК
-    func loadData(complition: @escaping () -> Void ) {
+    func loadData() {
         
         // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
@@ -92,12 +92,10 @@ class GetFriendsList {
                 
                 DispatchQueue.main.async {
                     RealmOperations().saveFriendsToRealm(friendList)
-                    complition()
                 }
                 
             } catch let error {
                 print(error)
-                complition()
             }
         }
         task.resume()

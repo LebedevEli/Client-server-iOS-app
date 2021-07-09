@@ -5,7 +5,7 @@
 //  Created by Илья Лебедев on 29.06.2021.
 //
 
-import Foundation
+//import Foundation
 
 //class FriendsTableViewController: UITableViewController {
 //

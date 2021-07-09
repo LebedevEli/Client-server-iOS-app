@@ -46,7 +46,7 @@ struct GroupsResponse:  Decodable {
 class GetGroupsList {
     
     //данные для авторизации в ВК
-    func loadData(complition: @escaping ([Group]) -> Void ) {
+    func loadData() {
         
         // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
@@ -74,21 +74,19 @@ class GetGroupsList {
             
             do {
                 let arrayGroups = try JSONDecoder().decode(GroupsResponse.self, from: data)
-                var grougList: [Group] = []
+                var groupList: [Group] = []
                 for i in 0...arrayGroups.response.items.count-1 {
                     let name = ((arrayGroups.response.items[i].name))
                     let logo = arrayGroups.response.items[i].logo
-                    grougList.append(Group.init(groupName: name, groupLogo: logo))
+                    groupList.append(Group.init(groupName: name, groupLogo: logo))
                 }
                 
                 DispatchQueue.main.async {
-                    RealmOperations().saveGroupsToRealm(grougList)
-                    complition(grougList)
+                    RealmOperations().saveGroupsToRealm(groupList)
                 }
                 
             } catch let error {
                 print(error)
-                complition([])
             }
         }
         task.resume()

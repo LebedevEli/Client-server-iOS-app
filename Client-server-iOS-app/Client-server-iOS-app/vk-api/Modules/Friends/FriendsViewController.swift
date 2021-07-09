@@ -22,15 +22,27 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         tableView.refreshControl = myRefreshControl
         super.viewDidLoad()
         
-        loadFriendsFromRealm() // загрузка данных из реалма (кэш) для первоначального отображения
+        subNotificationRealm() // подписываемся на уведомления realm
+        
+//        loadFriendsFromRealm() // загрузка данных из реалма (кэш) для первоначального отображения
     
         // запуск обновления данных из сети, запись в Реалм и загрузка из реалма новых данных
-        GetFriendsList().loadData() { [weak self] () in
-            self?.loadFriendsFromRealm()
-        }
+        GetFriendsList().loadData()
         
         searchBar.delegate = self
     }
+    
+    var realm: Realm = {
+        let configurateRealm = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        let realm = try! Realm(configuration: configurateRealm)
+        return realm
+    }()
+    
+    lazy var friendsFromRealm: Results<Friend> = {
+        return realm.objects(Friend.self)
+    }()
+    
+    var notificationToken: NotificationToken?
     
     var friendsList: [Friend] = []
     var namesListFixed: [String] = [] //эталонный массив с именами для сравнения при поиске
@@ -117,19 +129,38 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     // MARK: - functions
     
+    private func subNotificationRealm() {
+        notificationToken = friendsFromRealm.observe({ [weak self] changes in
+            switch changes {
+            case .initial:
+                self?.loadFriendsFromRealm()
+            case .update:
+                self?.loadFriendsFromRealm()
+            case let .error(error):
+                print(error)
+            }
+        })
+    }
+    
     func loadFriendsFromRealm() {
-        do {
-            let realm = try Realm()
-            let friendsFromRealm = realm.objects(Friend.self)
-            friendsList = Array(friendsFromRealm)
-            
-            guard friendsList.count != 0 else { return } // проверка, что в реалме что-то есть
-            makeNamesList()
-            sortCharacterOfNamesAlphabet()
-            tableView.reloadData()
-        } catch {
-            print(error)
-        }
+        
+        friendsList = Array(friendsFromRealm)
+        guard friendsList.count != 0 else {return} // проверка реалма на содержимое
+        makeNamesList()
+        sortCharacterOfNamesAlphabet()
+        tableView.reloadData()
+//        do {
+//            let realm = try Realm()
+//            let friendsFromRealm = realm.objects(Friend.self)
+//            friendsList = Array(friendsFromRealm)
+//
+//            guard friendsList.count != 0 else { return } // проверка, что в реалме что-то есть
+//            makeNamesList()
+//            sortCharacterOfNamesAlphabet()
+//            tableView.reloadData()
+//        } catch {
+//            print(error)
+//        }
     }
     
     // создание массива из имен пользователей
@@ -230,7 +261,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             // индекс нажатой ячейки
             if let indexPath = tableView.indexPathForSelectedRow {
                 friend.title = getNameFriendForCell(indexPath) //тайтл экрана (имя пользователя)
-                friend.userID = getIDFriend(indexPath)
+                friend.ownerID = getIDFriend(indexPath)
             }
         }
     }

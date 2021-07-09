@@ -7,23 +7,30 @@
 
 import UIKit
 import Kingfisher
-
+import RealmSwift
 
 
 class PhotoCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        GetPhotosFriend().loadData(owner_id: userID) { [weak self] (complition) in
-            DispatchQueue.main.async {
-                self?.collectionPhotos = complition
-                self?.collectionView.reloadData()
-            }
-        }
+        loadPhotosFromRealm()
+        GetPhotosFriend().loadData(ownerID)
     }
     
-    var userID = ""
+    var realm: Realm = {
+        let configurateRealm = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        let realm = try! Realm(configuration: configurateRealm)
+        return realm
+    }()
+    
+    lazy var photosFromRealm: Results<Photo> = {
+        return realm.objects(Photo.self).filter("ownerID == %@", ownerID)
+    }()
+    
+    var notificationToken: NotificationToken?
+    
+    var ownerID = ""
     var collectionPhotos: [Photo] = []
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -41,6 +48,27 @@ class PhotoCollectionViewController: UICollectionViewController {
         }
         
         return cell
+    }
+    
+    //MARK: - Func
+    
+    private func subNotificationRealm() {
+        notificationToken = photosFromRealm.observe({ [weak self] changes in
+            switch changes {
+            case .initial:
+                self?.loadPhotosFromRealm()
+            case .update:
+                self?.loadPhotosFromRealm()
+            case let .error(error):
+                print(error)
+            }
+        })
+    }
+    
+    func loadPhotosFromRealm() {
+        collectionPhotos = Array(photosFromRealm)
+        guard collectionPhotos.count != 0 else {return} // проверка реалм на содержимое
+        collectionView.reloadData()
     }
     
     // MARK: - segue

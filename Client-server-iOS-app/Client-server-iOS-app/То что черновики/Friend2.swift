@@ -5,7 +5,7 @@
 //  Created by Илья Лебедев on 28.06.2021.
 //
 
-import Foundation
+//import Foundation
 //struct Friend {
 //    var name: String?
 //    var avatar: UIImage?

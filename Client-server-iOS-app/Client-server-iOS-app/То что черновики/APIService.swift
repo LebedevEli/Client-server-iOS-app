@@ -4,8 +4,8 @@
 //
 //  Created by Илья Лебедев on 22.06.2021.
 //
-import Alamofire
-import Foundation
+//import Alamofire
+//import Foundation
 
 //final class APIService {
 //    let baseUrl = "https://api.vk.com/method"
