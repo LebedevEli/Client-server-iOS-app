@@ -38,7 +38,7 @@
                     <navigationItem key="navigationItem" id="XNz-Pz-3Cz"/>
                     <connections>
                         <outlet property="webView" destination="Ftv-sU-2z7" id="brT-Wt-DXO"/>
-                        <segue destination="NFA-v4-N8m" kind="show" identifier="showFriendsSegue" id="udE-JW-j0l"/>
+                        <segue destination="NFA-v4-N8m" kind="show" identifier="AuthVKSuccessful" id="Oep-lh-kbB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

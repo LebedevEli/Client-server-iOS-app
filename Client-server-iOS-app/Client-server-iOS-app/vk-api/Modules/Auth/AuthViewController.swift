@@ -7,7 +7,7 @@
 
 import UIKit
 import WebKit
-
+import FirebaseDatabase
 
 class AuthViewController: UIViewController {
     
@@ -20,8 +20,6 @@ class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-      
         
         //oauthAuthorizationToVK
         authorizeToVK()
@@ -49,17 +47,72 @@ class AuthViewController: UIViewController {
         webView.load(request)
     }
     
+    func removeCookie() {
+        let cookieStore = webView.configuration.websiteDataStore.httpCookieStore
+        
+        cookieStore.getAllCookies { cookies in
+            for cookie in cookies {
+                cookieStore.delete(cookie)
+            }
+        }
+    }
+    
     //MARK: - WKNavigationDelegate
+    
+//    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+//
+//        guard let url = navigationResponse.response.url, url.path == "/blank.html",
+//              let fragment = url.fragment  else {
+//            decisionHandler(.allow)
+//            return
+//        }
+//
+//        //TODO: Расписать этот код
+//        let params = fragment
+//            .components(separatedBy: "&")
+//            .map { $0.components(separatedBy: "=") }
+//            .reduce([String: String]()) { result, param in
+//                var dict = result
+//                let key = param[0]
+//                let value = param[1]
+//                dict[key] = value
+//                return dict
+//            }
+//        //TODO: Отслеживать протухание токена
+//        if  let token = params["access_token"], let userId = params["user_id"], let expiresIn = params["expires_in"] {
+//            print("TOKEN = ", token as Any)
+//            self.session.token = token
+//            self.session.userId = Int(userId) ?? 0
+//            self.session.expiredDate = Date(timeIntervalSinceNow: TimeInterval(Int(expiresIn) ?? 0))
+//
+//            showMainTabBar()
+//
+//
+//        }
+//
+//        decisionHandler(.cancel)
+//    }
+//
+//    //MARK:
+//    func showMainTabBar(){
+//        performSegue(withIdentifier: "showFriendsSegue", sender: nil)
+//    }
+//
+}
+
+//MARK: - extension
+
+extension AuthViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         
-        guard let url = navigationResponse.response.url, url.path == "/blank.html",
-              let fragment = url.fragment  else {
+        // проверка на полученый адрес и получение данных из урла
+        guard let url = navigationResponse.response.url, url.path == "/blank.html", let fragment = url.fragment  else {
             decisionHandler(.allow)
             return
         }
+        //print(fragment)
         
-        //TODO: Расписать этот код
         let params = fragment
             .components(separatedBy: "&")
             .map { $0.components(separatedBy: "=") }
@@ -69,28 +122,61 @@ class AuthViewController: UIViewController {
                 let value = param[1]
                 dict[key] = value
                 return dict
-            }
-        //TODO: Отслеживать протухание токена
-        if  let token = params["access_token"], let userId = params["user_id"], let expiresIn = params["expires_in"] {
-            print("TOKEN = ", token as Any)
-            self.session.token = token
-            self.session.userId = Int(userId) ?? 0
-            self.session.expiredDate = Date(timeIntervalSinceNow: TimeInterval(Int(expiresIn) ?? 0))
-            
-            showMainTabBar()
-            
-            
         }
         
-        decisionHandler(.cancel)
+        //DispatchQueue.main.async {
+            if let token = params["access_token"], let userID = params["user_id"], let expiresIn = params["expires_in"] {
+                self.session.token = token
+                self.session.userId = Int(userID) ?? 0
+                self.session.expiredDate = Date(timeIntervalSinceNow: TimeInterval(Int(expiresIn) ?? 0))
+                
+//                showMainTabBar()
+                
+                decisionHandler(.cancel)
+                 
+                writeUserToFirebase(userID)
+                //testWriteFireBase(userID)
+                
+                // переход на контроллер с логином и вход в приложение при успешной авторизации
+                self.performSegue(withIdentifier: "AuthVKSuccessful", sender: nil)
+//            } else {
+//                decisionHandler(.allow)
+//                // просто переход на контроллер с логином при неуспешной авторизации
+//                self.performSegue(withIdentifier: "AuthVKUnsuccessful", sender: nil)
+//            }
+        }
     }
     
-    //MARK:
-    func showMainTabBar(){
-        performSegue(withIdentifier: "showFriendsSegue", sender: nil)
+//    func showMainTabBar(){
+//        performSegue(withIdentifier: "showFriendsSegue", sender: nil)
+//    }
+    //MARK: - Firebase
+    private func writeUserToFirebase(_ userID: String){
+        // работаем с Firebase
+        let database = Database.database()
+        let ref: DatabaseReference = database.reference(withPath: "All logged users")
+        
+        // чтение из Firebase
+        ref.observe(.value) { snapshot in
+            let users = snapshot.children.compactMap { $0 as? DataSnapshot }
+            let keys = users.compactMap { $0.key }
+            
+            // проверка, что пользователь уже записан в Firebase
+            guard keys.contains(userID) == false else {
+                ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходила запись  при изменении базы
+                
+                let user = snapshot.childSnapshot(forPath: userID).value
+                //let user = snapshot.children
+                print("Текущий пользователь с ID \(userID) добавил следующие группы:\n\(user ?? "")")
+                
+    //                let value = users.compactMap { $0.value }
+    //                print("Пользователь: \(userID) добавил следующие группы: \(value)")
+                return
+            }
+            
+            // пишем нового пользователя если его нет в Firebase
+            ref.child(userID).setValue("нет добавленных групп")
+            print("В Firebase записан новый пользователь, ID: \(userID)")
+        }
     }
-    
-}
-extension AuthViewController: WKNavigationDelegate {
-    
 }

@@ -12,5 +12,7 @@ pod 'SwiftKeychainWrapper'
 pod 'RealmSwift'
 pod 'Kingfisher'
 pod 'DynamicJSON'
+pod 'Firebase/Database'
+pod 'Firebase/Auth'
 
 end

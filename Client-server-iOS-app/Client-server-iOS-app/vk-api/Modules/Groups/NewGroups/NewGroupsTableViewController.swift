@@ -11,7 +11,6 @@ class NewGroupsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupSearchBar()
         
     }

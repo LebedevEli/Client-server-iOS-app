@@ -7,6 +7,8 @@
 
 import UIKit
 import Kingfisher
+import RealmSwift
+import FirebaseDatabase
 
 class GroupsViewController: UITableViewController {
     
@@ -14,11 +16,25 @@ class GroupsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        subscribeToNotificationRealm() // загрузка данных из реалма (кэш) для первоначального отображения
+        
         tableView.refreshControl = myRefreshControl
 
         //получение данного JSON
         GetGroupsList().loadData()
     }
+    
+    var realm: Realm = {
+        let configrealm = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+        let realm = try! Realm(configuration: configrealm)
+        return realm
+    }()
+    
+    lazy var groupsFromRealm: Results<Group> = {
+        return realm.objects(Group.self)
+    }()
+    
+    var notificationToken: NotificationToken?
     
     var myGroups: [Group] = []
     
@@ -48,8 +64,15 @@ class GroupsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            myGroups.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade) // не обязательно удалять строку, если используется reloadData()
+            
+            // удаление группы из реалма + обновление таблички из Реалма
+            do {
+                try realm.write{
+                    realm.delete(groupsFromRealm.filter("groupName == %@", myGroups[indexPath.row].groupName))
+                }
+            } catch {
+                print(error)
+            }
         }
     }
     
@@ -62,6 +85,39 @@ class GroupsViewController: UITableViewController {
     @objc private func refresh(sender: UIRefreshControl) {
         sender.endRefreshing()
     } //Работает пока коряво.
+    
+    //MARK: - Func
+    
+    private func subscribeToNotificationRealm() {
+        notificationToken = groupsFromRealm.observe { [weak self] (changes) in
+            switch changes {
+            case .initial:
+                self?.loadGroupsFromRealm()
+            //case let .update (_, deletions, insertions, modifications):
+            case .update:
+                self?.loadGroupsFromRealm()
+
+                //self?.tableView.beginUpdates()
+                
+                // крашится при вызове, так как не попадает в секции, надо перерабатывать логику
+                //self?.tableView.deleteRows(at: deletions.map{ IndexPath(row: $0, section: 0) }, with: .automatic)
+                //self?.tableView.insertRows(at: insertions.map{ IndexPath(row: $0, section: 0) }, with: .automatic)
+                //self?.tableView.reloadRows(at: modifications.map{ IndexPath(row: $0, section: 0) }, with: .automatic)
+                
+                //self?.tableView.endUpdates()
+                
+
+            case let .error(error):
+                print(error)
+            }
+        }
+    }
+    
+    func loadGroupsFromRealm() {
+            myGroups = Array(groupsFromRealm)
+            guard groupsFromRealm.count != 0 else { return } // проверка, что в реалме что-то есть
+            tableView.reloadData()
+    }
     
     //MARK: - добавление новой группы из другого контроллера
     
@@ -82,6 +138,36 @@ class GroupsViewController: UITableViewController {
                 
                 tableView.reloadData()
             }
+        }
+    }
+    
+    //MARK: - Firebase
+    
+    private func writeNewGroupToFirebase(_ newGroup: Group){
+        // работаем с Firebase
+        let database = Database.database()
+        // путь к нужному пользователю в Firebase (тот кто залогинился уже есть базе, другие не интересны)
+        let ref: DatabaseReference = database.reference(withPath: "All logged users").child(String(Session.shared.userId))
+        
+        // чтение из Firebase
+        ref.observe(.value) { snapshot in
+            
+            let groupsIDs = snapshot.children.compactMap { $0 as? DataSnapshot }
+                .compactMap { $0.key }
+            
+            // проверка есть ли ID группы в Firebase
+            guard groupsIDs.contains(String(newGroup.id)) == false else { return }
+    
+            //ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходило изменений при изменении базы
+            ref.child(String(newGroup.id)).setValue(newGroup.groupName) // записываем новую группу в Firebase
+            
+            print("Для пользователя с ID: \(String(Session.shared.userId)) в Firebase записана группа:\n\(newGroup.groupName)")
+            
+            let groups = snapshot.children.compactMap { $0 as? DataSnapshot }
+            .compactMap { $0.value }
+            
+            print("\nРанее добавленные в Firebase группы пользователя с ID \(String(Session.shared.userId)):\n\(groups)")
+            ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходило изменений при записи в базу
         }
     }
     
