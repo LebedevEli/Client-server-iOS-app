@@ -9,15 +9,25 @@ import UIKit
 
 class FeedViewController: UITableViewController {
     
-    var news = [
-    Feed(name: "Elon Musk", avatar: #imageLiteral(resourceName: "28"), date: "02.07.2021", textNews: "Bitcoin's price fell Friday morning after Elon Musk posted a tweet suggesting he's fallen out of love with the world's top cryptocurrency. The billionaire Tesla CEO tweeted a meme about a couple breaking up over the male partner quoting Linkin Park lyrics, adding the hashtag #Bitcoin and a broken heart emoji.", textImage: #imageLiteral(resourceName: "21")),
-    Feed(name: "Barack Obama", avatar: #imageLiteral(resourceName: "30"), date: "01.06.2021", textNews: "Trump broke ‘core tenet’ of democracy with ‘bunch of hooey’ over election", textImage: #imageLiteral(resourceName: "29"))
-    ]
+    var news: [Feed] = []
     
     override func viewDidLoad() {
         
         tableView.refreshControl = myRefreshControl
         super.viewDidLoad()
+        
+        APIManager.shared.getPost(id: "post1", imageID: "3000") {res1 in
+            self.news.append(res1!)
+            APIManager.shared.getPost(id: "post2", imageID: "bitcoin") {res2 in
+                self.news.append(res2!)
+                APIManager.shared.getPost(id: "post3", imageID: "download") {res3 in
+                    self.news.append(res3!)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+        }
     }
     
     let myRefreshControl: UIRefreshControl = {
@@ -35,21 +45,25 @@ class FeedViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! FeedTableViewCell
         
-        // аватар
-        cell.avatarFeed.avatarImage.image = news[indexPath.row].avatar
-        // имя автора
+//        // аватар
+//        cell.avatarFeed.avatarImage.image = news[indexPath.row].avatar
+//        // имя автора
+//        cell.nameFeed.text = news[indexPath.row].name
+//        // дата новости
+//        cell.dateFeed.text = news[indexPath.row].date
+//        cell.dateFeed.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.light)
+//        cell.dateFeed.textColor = UIColor.gray.withAlphaComponent(0.5)
+//        //текст новости
+//        cell.textFeed.text = news[indexPath.row].text
+//        cell.textFeed.numberOfLines = 0
+//        //картинка к новости
+//        cell.imageFeed.image = news[indexPath.row].textImage
+//        cell.imageFeed.contentMode = .scaleAspectFill
         cell.nameFeed.text = news[indexPath.row].name
-        // дата новости
         cell.dateFeed.text = news[indexPath.row].date
-        cell.dateFeed.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.light)
-        cell.dateFeed.textColor = UIColor.gray.withAlphaComponent(0.5)
-        //текст новости
-        cell.textFeed.text = news[indexPath.row].textNews
-        cell.textFeed.numberOfLines = 0
-        //картинка к новости
+        cell.textFeed.text = news[indexPath.row].text
         cell.imageFeed.image = news[indexPath.row].textImage
-        cell.imageFeed.contentMode = .scaleAspectFill
-
+        cell.avatarFeed.avatarImage.image = news[indexPath.row].avatar
         return cell
     }
     

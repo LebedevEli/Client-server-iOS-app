@@ -41,10 +41,11 @@
 		1134DB362682557B0052DDFE /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1134DB352682557B0052DDFE /* AuthViewController.swift */; };
 		1134DB382682558A0052DDFE /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1134DB372682558A0052DDFE /* FriendsViewController.swift */; };
 		1134DB3A26825C330052DDFE /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1134DB3926825C330052DDFE /* APIService.swift */; };
+		115245F626A6DB8500A4D5B9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 115245F526A6DB8500A4D5B9 /* GoogleService-Info.plist */; };
+		115245F826A6DFB700A4D5B9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115245F726A6DFB700A4D5B9 /* APIManager.swift */; };
 		1194C73D2688FD48000F9821 /* FriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194C73B2688FD48000F9821 /* FriendsTableViewCell.swift */; };
 		1194C7422688FE9F000F9821 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194C7412688FE9F000F9821 /* AvatarView.swift */; };
 		1194C74626890B37000F9821 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194C74426890B37000F9821 /* PhotoCollectionViewCell.swift */; };
-		11CF230626A17B7600BFB630 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11CF230526A17B7600BFB630 /* GoogleService-Info.plist */; };
 		11D7756D26825EC800CEB07B /* Data+prettyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D7756C26825EC800CEB07B /* Data+prettyJSON.swift */; };
 		B5ED8A1B14E2DE0FB696386B /* Pods_vk_api.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B32B2C4CCAC3895712CA3599 /* Pods_vk_api.framework */; };
 /* End PBXBuildFile section */
@@ -86,10 +87,11 @@
 		1134DB352682557B0052DDFE /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		1134DB372682558A0052DDFE /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		1134DB3926825C330052DDFE /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		115245F526A6DB8500A4D5B9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		115245F726A6DFB700A4D5B9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		1194C73B2688FD48000F9821 /* FriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewCell.swift; sourceTree = "<group>"; };
 		1194C7412688FE9F000F9821 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1194C74426890B37000F9821 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
-		11CF230526A17B7600BFB630 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		11D7756C26825EC800CEB07B /* Data+prettyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+prettyJSON.swift"; sourceTree = "<group>"; };
 		436827D85EBBA187B1316413 /* Pods-vk-api.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vk-api.debug.xcconfig"; path = "Target Support Files/Pods-vk-api/Pods-vk-api.debug.xcconfig"; sourceTree = "<group>"; };
 		6C50F0F9FB60379B387A8D24 /* Pods-vk-api.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vk-api.release.xcconfig"; path = "Target Support Files/Pods-vk-api/Pods-vk-api.release.xcconfig"; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				1134DB272682549C0052DDFE /* Info.plist */,
+				115245F526A6DB8500A4D5B9 /* GoogleService-Info.plist */,
 				1134DB182682549A0052DDFE /* vk-api */,
 				111EE3B3268496E4006E312E /* То что черновики */,
 				0DA5974E77931859943D95EC /* Pods */,
@@ -265,7 +268,6 @@
 			children = (
 				1134DB192682549A0052DDFE /* AppDelegate.swift */,
 				1134DB1B2682549A0052DDFE /* SceneDelegate.swift */,
-				11CF230526A17B7600BFB630 /* GoogleService-Info.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -299,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				1134DB2D268254AD0052DDFE /* Session.swift */,
+				115245F726A6DFB700A4D5B9 /* APIManager.swift */,
 				110101DB268A53D0007EEB78 /* GetFriend.swift */,
 				110101DD268A53DE007EEB78 /* GetPhotoFriend.swift */,
 				110101DF268A53EF007EEB78 /* GetGroup.swift */,
@@ -404,7 +407,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1134DB262682549C0052DDFE /* LaunchScreen.storyboard in Resources */,
-				11CF230626A17B7600BFB630 /* GoogleService-Info.plist in Resources */,
+				115245F626A6DB8500A4D5B9 /* GoogleService-Info.plist in Resources */,
 				1134DB232682549C0052DDFE /* Assets.xcassets in Resources */,
 				1134DB212682549A0052DDFE /* Main.storyboard in Resources */,
 			);
@@ -471,6 +474,7 @@
 				11053AEF268F14470083BD23 /* FeedTableViewCell.swift in Sources */,
 				111EE3B92684A020006E312E /* PhotoForGet.swift in Sources */,
 				1194C73D2688FD48000F9821 /* FriendsTableViewCell.swift in Sources */,
+				115245F826A6DFB700A4D5B9 /* APIManager.swift in Sources */,
 				110101DE268A53DE007EEB78 /* GetPhotoFriend.swift in Sources */,
 				11053AE5268E0AC10083BD23 /* NewGroupTableViewCell.swift in Sources */,
 				1194C74626890B37000F9821 /* PhotoCollectionViewCell.swift in Sources */,
