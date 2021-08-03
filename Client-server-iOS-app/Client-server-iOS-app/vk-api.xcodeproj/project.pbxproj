@@ -43,6 +43,7 @@
 		1134DB3A26825C330052DDFE /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1134DB3926825C330052DDFE /* APIService.swift */; };
 		115245F626A6DB8500A4D5B9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 115245F526A6DB8500A4D5B9 /* GoogleService-Info.plist */; };
 		115245F826A6DFB700A4D5B9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115245F726A6DFB700A4D5B9 /* APIManager.swift */; };
+		1174360D26B940620062328F /* GetNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1174360C26B940620062328F /* GetNews.swift */; };
 		1194C73D2688FD48000F9821 /* FriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194C73B2688FD48000F9821 /* FriendsTableViewCell.swift */; };
 		1194C7422688FE9F000F9821 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194C7412688FE9F000F9821 /* AvatarView.swift */; };
 		1194C74626890B37000F9821 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1194C74426890B37000F9821 /* PhotoCollectionViewCell.swift */; };
@@ -89,6 +90,7 @@
 		1134DB3926825C330052DDFE /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		115245F526A6DB8500A4D5B9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		115245F726A6DFB700A4D5B9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		1174360C26B940620062328F /* GetNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNews.swift; sourceTree = "<group>"; };
 		1194C73B2688FD48000F9821 /* FriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewCell.swift; sourceTree = "<group>"; };
 		1194C7412688FE9F000F9821 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1194C74426890B37000F9821 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 		111EE3B3268496E4006E312E /* То что черновики */ = {
 			isa = PBXGroup;
 			children = (
+				115245F726A6DFB700A4D5B9 /* APIManager.swift */,
 				111EE3B426849707006E312E /* APIServiceVar2.swift */,
 				1134DB3926825C330052DDFE /* APIService.swift */,
 				110101E5268A5690007EEB78 /* Friend2.swift */,
@@ -301,12 +304,12 @@
 			isa = PBXGroup;
 			children = (
 				1134DB2D268254AD0052DDFE /* Session.swift */,
-				115245F726A6DFB700A4D5B9 /* APIManager.swift */,
 				110101DB268A53D0007EEB78 /* GetFriend.swift */,
 				110101DD268A53DE007EEB78 /* GetPhotoFriend.swift */,
 				110101DF268A53EF007EEB78 /* GetGroup.swift */,
 				110101E1268A53FC007EEB78 /* SearchGroup.swift */,
 				110101E3268A5410007EEB78 /* RealmOperation.swift */,
+				1174360C26B940620062328F /* GetNews.swift */,
 			);
 			name = Services;
 			path = ..;
@@ -488,6 +491,7 @@
 				1134DB1A2682549A0052DDFE /* AppDelegate.swift in Sources */,
 				1134DB3A26825C330052DDFE /* APIService.swift in Sources */,
 				110101E8268A56C8007EEB78 /* Group2.swift in Sources */,
+				1174360D26B940620062328F /* GetNews.swift in Sources */,
 				110101DC268A53D0007EEB78 /* GetFriend.swift in Sources */,
 				111EE3BD2684A0CF006E312E /* PhotoCollectionViewController.swift in Sources */,
 				11D7756D26825EC800CEB07B /* Data+prettyJSON.swift in Sources */,

@@ -7,10 +7,22 @@
 
 import UIKit
 
-struct Feed {
+struct PostNews {
     var name: String
-    var avatar: UIImage?
+    var avatar: String
     var date: String
-    var text: String
-    var textImage: UIImage?
+    var textNews: String
+    var imageNews: String
+    var likes: Int
+    var comments: Int
+    var reposts: Int
+    var views: Int
 }
+
+//struct Feed {
+//    var name: String
+//    var avatar: UIImage?
+//    var date: String
+//    var text: String
+//    var textImage: UIImage?
+//}

@@ -7,7 +7,7 @@
 
 import UIKit
 import WebKit
-import FirebaseDatabase
+//import FirebaseDatabase
 
 class AuthViewController: UIViewController {
     
@@ -134,7 +134,7 @@ extension AuthViewController: WKNavigationDelegate {
                 
                 decisionHandler(.cancel)
                  
-                writeUserToFirebase(userID)
+//                writeUserToFirebase(userID)
                 //testWriteFireBase(userID)
                 
                 // переход на контроллер с логином и вход в приложение при успешной авторизации
@@ -151,32 +151,32 @@ extension AuthViewController: WKNavigationDelegate {
 //        performSegue(withIdentifier: "showFriendsSegue", sender: nil)
 //    }
     //MARK: - Firebase
-    private func writeUserToFirebase(_ userID: String){
-        // работаем с Firebase
-        let database = Database.database()
-        let ref: DatabaseReference = database.reference(withPath: "All logged users")
-        
-        // чтение из Firebase
-        ref.observe(.value) { snapshot in
-            let users = snapshot.children.compactMap { $0 as? DataSnapshot }
-            let keys = users.compactMap { $0.key }
-            
-            // проверка, что пользователь уже записан в Firebase
-            guard keys.contains(userID) == false else {
-                ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходила запись  при изменении базы
-                
-                let user = snapshot.childSnapshot(forPath: userID).value
-                //let user = snapshot.children
-                print("Текущий пользователь с ID \(userID) добавил следующие группы:\n\(user ?? "")")
-                
-    //                let value = users.compactMap { $0.value }
-    //                print("Пользователь: \(userID) добавил следующие группы: \(value)")
-                return
-            }
-            
-            // пишем нового пользователя если его нет в Firebase
-            ref.child(userID).setValue("нет добавленных групп")
-            print("В Firebase записан новый пользователь, ID: \(userID)")
-        }
-    }
+//    private func writeUserToFirebase(_ userID: String){
+//        // работаем с Firebase
+//        let database = Database.database()
+//        let ref: DatabaseReference = database.reference(withPath: "All logged users")
+//
+//        // чтение из Firebase
+//        ref.observe(.value) { snapshot in
+//            let users = snapshot.children.compactMap { $0 as? DataSnapshot }
+//            let keys = users.compactMap { $0.key }
+//
+//            // проверка, что пользователь уже записан в Firebase
+//            guard keys.contains(userID) == false else {
+//                ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходила запись  при изменении базы
+//
+//                let user = snapshot.childSnapshot(forPath: userID).value
+//                //let user = snapshot.children
+//                print("Текущий пользователь с ID \(userID) добавил следующие группы:\n\(user ?? "")")
+//
+//    //                let value = users.compactMap { $0.value }
+//    //                print("Пользователь: \(userID) добавил следующие группы: \(value)")
+//                return
+//            }
+//
+//            // пишем нового пользователя если его нет в Firebase
+//            ref.child(userID).setValue("нет добавленных групп")
+//            print("В Firebase записан новый пользователь, ID: \(userID)")
+//        }
+//    }
 }
