@@ -136,15 +136,12 @@ struct NewsResponse: Decodable {
 
 class GetNewsList {
     
-    //данные для авторизации в ВК
     func loadData(complition: @escaping ([PostNews]) -> Void ) {
         
-        // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
+        
         let session =  URLSession(configuration: configuration)
         
-        // конструктор для URL
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -157,17 +154,14 @@ class GetNewsList {
             URLQueryItem(name: "v", value: "5.131")
         ]
               
-        // задача для запуска
         let task = session.dataTask(with: urlConstructor.url!) { (data, response, error) in
-            //print("Запрос к API: \(urlConstructor.url!)")
             
-            // в замыкании данные, полученные от сервера, мы преобразуем в json
             guard let data = data else { return }
             
             do {
                 let arrayNews = try JSONDecoder().decode(NewsResponse.self, from: data)
                 
-                guard arrayNews.response.items.isEmpty == false else { return } // проверка на наличие новостей
+                guard arrayNews.response.items.isEmpty == false else { return }
                 
                 var avatar: String = ""
                 var name: String = ""
@@ -179,7 +173,7 @@ class GetNewsList {
                 
                 for i in 0...arrayNews.response.items.count-1 {
                     let typeNews = arrayNews.response.items[i].attachments?.first?.type
-                    guard typeNews != "link" || typeNews != "photo" else { return } //проверка типа новостей, отрабатываем только два варианта
+                    guard typeNews != "link" || typeNews != "photo" else { return }
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
@@ -200,9 +194,6 @@ class GetNewsList {
                     let reposts = arrayNews.response.items[i].reposts.count
                     let views = arrayNews.response.items[i].views.count
 
-                   
-                // имена и аватарки групп
-                   // много вложенных циклов!
                     let sourceID = arrayNews.response.items[i].sourceID * -1
                     for i in 0...arrayNews.response.groups.count-1 {
                         if arrayNews.response.groups[i].id == sourceID {

@@ -14,10 +14,7 @@ class FriendsPhotosViewController: UIViewController {
         
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan))
         view.addGestureRecognizer(recognizer)
-        
-        //photoCurent.load(url: URL(string: allPhotos[countCurentPhoto])!)
-        //let xxx = allPhotos[countCurentPhoto].photo
-        photoCurent.kf.setImage(with: URL(string: allPhotos[countCurentPhoto].photo)) //работает через Kingfisher (с кэшем)
+        photoCurent.kf.setImage(with: URL(string: allPhotos[countCurentPhoto].photo))
 
     }
     
@@ -51,12 +48,12 @@ class FriendsPhotosViewController: UIViewController {
             
         case .ended:
             interactiveAnimator.stopAnimation(true)
-            if recognizer.translation(in: self.view).x < 0 { // проверка в какую сторону движется палец (лево/право)
-                if  countCurentPhoto < allPhotos.count - 1  { // проверка, что фотка будет в массиве и не делать счетчик больше
+            if recognizer.translation(in: self.view).x < 0 {
+                if  countCurentPhoto < allPhotos.count - 1  {
                     self.countCurentPhoto += 1
                 }
             } else {
-                if countCurentPhoto != 0 {  // проверка, что фотка будет в массиве и не делать счетчик меньше
+                if countCurentPhoto != 0 {
                     self.countCurentPhoto -= 1
                 }
             }

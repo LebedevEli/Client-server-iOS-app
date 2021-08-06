@@ -10,15 +10,12 @@ import Foundation
 
 class SearchGroup {
     
-    //данные для авторизации в ВК
     func loadData(searchText:String, complition: @escaping ([Group]) -> Void ) {
         
-        // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
+        
         let session =  URLSession(configuration: configuration)
         
-        // конструктор для URL
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -30,11 +27,8 @@ class SearchGroup {
             URLQueryItem(name: "v", value: "5.131")
         ]
         
-        // задача для запуска
         let task = session.dataTask(with: urlConstructor.url!) { (data, response, error) in
-            //print("Запрос к API: \(urlConstructor.url!)")
             
-            // в замыкании данные, полученные от сервера, мы преобразуем в json
             guard let data = data else { return }
 
             do {

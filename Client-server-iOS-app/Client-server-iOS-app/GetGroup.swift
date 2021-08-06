@@ -18,15 +18,9 @@ struct GroupsResponse:  Decodable {
         
         struct Item: Decodable {
             var name: String
-            var logo: String  // уже тут нужно писать желаемые названия
+            var logo: String
             var id: Int
-            //ненужные поля
-            //var screen_name: String
-            //var photo_50: String
             
-            // enum и init нужны если нужно иметь другие названия переменных в отличии от даннных в json
-            // например: logo = "photo_50" (я хочу: logo, а в jsone это: photo_50 )
-            // но все равно нужно указать другие значения, например: name (без уточнения)
             enum CodingKeys: String, CodingKey {
                 case name
                 case logo = "photo_50"
@@ -46,15 +40,12 @@ struct GroupsResponse:  Decodable {
 
 class GetGroupsList {
     
-    //данные для авторизации в ВК
     func loadData() {
         
-        // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
+        
         let session =  URLSession(configuration: configuration)
         
-        // конструктор для URL
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -66,11 +57,8 @@ class GetGroupsList {
             URLQueryItem(name: "v", value: "5.131")
         ]
         
-        // задача для запуска
         let task = session.dataTask(with: urlConstructor.url!) { (data, response, error) in
-            //print("Запрос к API: \(urlConstructor.url!)")
             
-            // в замыкании данные, полученные от сервера, мы преобразуем в json
             guard let data = data else { return }
             
             do {
@@ -92,18 +80,5 @@ class GetGroupsList {
             }
         }
         task.resume()
-        
     }
-    
-//    func saveGroupsToRealm(_ grougList: [Group]) {
-//        do {
-//            let realm = try Realm()
-//            try realm.write{
-//                realm.add(grougList)
-//            }
-//        } catch {
-//            print(error)
-//        }
-//    }
-    
 }

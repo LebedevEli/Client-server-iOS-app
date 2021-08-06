@@ -6,7 +6,7 @@
 //
 
 import UIKit
-//загрузка картинок по URL
+
 extension UIImageView {
     func load(url: URL) {
         DispatchQueue.global().async { [weak self] in

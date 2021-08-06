@@ -20,7 +20,6 @@ class Friend: Object {
         self.userAvatar = userAvatar
         self.ownerID = ownerID
     }
-    //инит, обязательный для Object
     required override init(){
         super.init()
     }

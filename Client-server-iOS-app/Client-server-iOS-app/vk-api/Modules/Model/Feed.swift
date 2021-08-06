@@ -19,10 +19,3 @@ struct PostNews {
     var views: Int
 }
 
-//struct Feed {
-//    var name: String
-//    var avatar: UIImage?
-//    var date: String
-//    var text: String
-//    var textImage: UIImage?
-//}

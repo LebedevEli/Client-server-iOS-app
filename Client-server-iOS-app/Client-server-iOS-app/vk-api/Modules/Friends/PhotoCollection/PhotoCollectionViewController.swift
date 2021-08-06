@@ -41,10 +41,9 @@ class PhotoCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotosFriendCell", for: indexPath) as! PhotoCollectionViewCell
         
         if let imgUrl = URL(string: collectionPhotos[indexPath.row].photo) {
-            let photo = ImageResource(downloadURL: imgUrl) //работает через Kingfisher
-            cell.friendPhotoImage.kf.setImage(with: photo) //работает через Kingfisher
+            let photo = ImageResource(downloadURL: imgUrl)
+            cell.friendPhotoImage.kf.setImage(with: photo)
             
-            //cell.photosFrienndImage.load(url: imgUrl)  // работает через extension UIImageView
         }
         
         return cell
@@ -67,22 +66,20 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     func loadPhotosFromRealm() {
         collectionPhotos = Array(photosFromRealm)
-        guard collectionPhotos.count != 0 else {return} // проверка реалм на содержимое
+        guard collectionPhotos.count != 0 else {return}
         collectionView.reloadData()
     }
     
     // MARK: - segue
-    // переход на контроллер с отображением крупной фотографии
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "showUserPhoto"{
-            // ссылка объект на контроллер с которого переход
+            
             guard let photosFriend = segue.destination as? FriendsPhotosViewController else { return }
             
-            // индекс нажатой ячейки
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
-                photosFriend.allPhotos = collectionPhotos //фотки
-                photosFriend.countCurentPhoto = indexPath.row // можно указать (indexPath[0][1]) или использовать (?.first) как сделано выше
+                photosFriend.allPhotos = collectionPhotos
+                photosFriend.countCurentPhoto = indexPath.row
             }
         }
     }

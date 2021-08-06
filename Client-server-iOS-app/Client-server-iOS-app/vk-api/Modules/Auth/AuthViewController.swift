@@ -20,8 +20,6 @@ class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //oauthAuthorizationToVK
         authorizeToVK()
     }
     
@@ -106,12 +104,11 @@ extension AuthViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         
-        // проверка на полученый адрес и получение данных из урла
+       
         guard let url = navigationResponse.response.url, url.path == "/blank.html", let fragment = url.fragment  else {
             decisionHandler(.allow)
             return
         }
-        //print(fragment)
         
         let params = fragment
             .components(separatedBy: "&")
@@ -123,27 +120,14 @@ extension AuthViewController: WKNavigationDelegate {
                 dict[key] = value
                 return dict
         }
-        
-        //DispatchQueue.main.async {
             if let token = params["access_token"], let userID = params["user_id"], let expiresIn = params["expires_in"] {
                 self.session.token = token
                 self.session.userId = Int(userID) ?? 0
                 self.session.expiredDate = Date(timeIntervalSinceNow: TimeInterval(Int(expiresIn) ?? 0))
                 
-//                showMainTabBar()
-                
                 decisionHandler(.cancel)
                  
-//                writeUserToFirebase(userID)
-                //testWriteFireBase(userID)
-                
-                // переход на контроллер с логином и вход в приложение при успешной авторизации
                 self.performSegue(withIdentifier: "AuthVKSuccessful", sender: nil)
-//            } else {
-//                decisionHandler(.allow)
-//                // просто переход на контроллер с логином при неуспешной авторизации
-//                self.performSegue(withIdentifier: "AuthVKUnsuccessful", sender: nil)
-//            }
         }
     }
     

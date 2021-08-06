@@ -41,7 +41,7 @@ class FeedViewController: UITableViewController {
         let  cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! FeedTableViewCell
         
         guard let avatarUrl = URL(string: postNewsList[indexPath.row].avatar ) else { return cell }
-        cell.avatarUserFeed.avatarImage.load(url: avatarUrl) // работает через extension UIImageView
+        cell.avatarUserFeed.avatarImage.load(url: avatarUrl)
         
         cell.nameUserFeed.text = postNewsList[indexPath.row].name
         
@@ -53,22 +53,17 @@ class FeedViewController: UITableViewController {
             cell.textNewsPost.text = postNewsList[indexPath.row].textNews
         }
         
-        //картинка к новости
         guard let imgUrl = URL(string: postNewsList[indexPath.row].imageNews ) else { return cell }
-        cell.imgNews.load(url: imgUrl) // работает через extension UIImageView
+        cell.imgNews.load(url: imgUrl)
         cell.imgNews.contentMode = .scaleAspectFill
         
-        // лайки
-        cell.likesCount.countLikes = postNewsList[indexPath.row].likes // значение для счетчика
-        cell.likesCount.labelLikes.text = String(postNewsList[indexPath.row].likes) // вывод количества лайков
+        cell.likesCount.countLikes = postNewsList[indexPath.row].likes
+        cell.likesCount.labelLikes.text = String(postNewsList[indexPath.row].likes)
         
-        // комментарии
         cell.commentsCount.setTitle(String(postNewsList[indexPath.row].comments), for: .normal)
         
-        // репосты
         cell.repostsCount.setTitle(String(postNewsList[indexPath.row].reposts), for: .normal)
         
-        // просмотры
         cell.viewsCount.setTitle(String(postNewsList[indexPath.row].views), for: .normal)
         
 

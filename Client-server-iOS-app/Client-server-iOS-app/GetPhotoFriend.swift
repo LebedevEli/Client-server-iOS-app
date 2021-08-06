@@ -15,13 +15,11 @@ struct PhotosResponse: Decodable {
         var items: [Item]
         
         struct Item: Decodable {
-            //var album_id: Int
-            //var date: Int
-            //var id: Int
+            
             var ownerID: Int
-            //var has_tags: Bool
+            
             var sizes: [Sizes]
-            //var text: String
+            
             
             private enum CodingKeys: String, CodingKey {
                 case ownerID = "owner_id"
@@ -36,10 +34,9 @@ struct PhotosResponse: Decodable {
             }
             
             struct Sizes: Decodable {
-                //var height: Int
+                
                 var url: String
-                //var type: String
-                //var width: Int
+                
             }
         }
     }
@@ -48,15 +45,14 @@ struct PhotosResponse: Decodable {
 
 class GetPhotosFriend {
     
-    //данные для авторизации в ВК
     func loadData(_ ownerID: String) {
         
-        // Конфигурация по умолчанию
+        
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
+        
         let session =  URLSession(configuration: configuration)
         
-        // конструктор для URL
+        
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -67,11 +63,8 @@ class GetPhotosFriend {
             URLQueryItem(name: "v", value: "5.131")
         ]
                 
-        // задача для запуска
         let task = session.dataTask(with: urlConstructor.url!) { (data, response, error) in
-            //print("Запрос к API: \(urlConstructor.url!)")
             
-            // в замыкании данные, полученные от сервера, мы преобразуем в json
             guard let data = data else { return }
             
             do {

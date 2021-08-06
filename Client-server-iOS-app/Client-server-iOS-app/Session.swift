@@ -13,12 +13,12 @@ final class Session {
     
     private init() {}
     
-    var token: String { //Хранение токена ВК
+    var token: String {
         get {KeychainWrapper.standard.string(forKey: "tokenVK") ?? ""}
         set {KeychainWrapper.standard.set(newValue, forKey: "tokenVK")}
     }
     
-    var userId: Int { //Хранение идентификатора пользователя ВК
+    var userId: Int { 
         get {KeychainWrapper.standard.integer(forKey: "userId") ?? 0}
         set {KeychainWrapper.standard.set(newValue, forKey: "userId")}
     }

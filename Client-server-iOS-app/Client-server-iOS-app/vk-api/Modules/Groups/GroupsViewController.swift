@@ -16,12 +16,12 @@ class GroupsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        subscribeToNotificationRealm() // загрузка данных из реалма (кэш) для первоначального отображения
+        subscribeToNotificationRealm()
         
         tableView.refreshControl = myRefreshControl
 
-        //получение данного JSON
-        GetGroupsList().loadData()
+//        GetGroupsList().loadData() // обычный способ
+        GetGroupOperation().getData() //Способ с Operations
     }
     
     var realm: Realm = {
@@ -65,7 +65,7 @@ class GroupsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            // удаление группы из реалма + обновление таблички из Реалма
+           
             do {
                 try realm.write{
                     realm.delete(groupsFromRealm.filter("groupName == %@", myGroups[indexPath.row].groupName))
@@ -77,14 +77,14 @@ class GroupsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true) //кратковременное подсвечивание при нажатии на ячейку
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     
     //MARK: - рефреш контрол (обновление страницы)
     @objc private func refresh(sender: UIRefreshControl) {
         sender.endRefreshing()
-    } //Работает пока коряво.
+    }
     
     //MARK: - Func
     
@@ -93,19 +93,9 @@ class GroupsViewController: UITableViewController {
             switch changes {
             case .initial:
                 self?.loadGroupsFromRealm()
-            //case let .update (_, deletions, insertions, modifications):
+            
             case .update:
                 self?.loadGroupsFromRealm()
-
-                //self?.tableView.beginUpdates()
-                
-                // крашится при вызове, так как не попадает в секции, надо перерабатывать логику
-                //self?.tableView.deleteRows(at: deletions.map{ IndexPath(row: $0, section: 0) }, with: .automatic)
-                //self?.tableView.insertRows(at: insertions.map{ IndexPath(row: $0, section: 0) }, with: .automatic)
-                //self?.tableView.reloadRows(at: modifications.map{ IndexPath(row: $0, section: 0) }, with: .automatic)
-                
-                //self?.tableView.endUpdates()
-                
 
             case let .error(error):
                 print(error)
@@ -115,22 +105,17 @@ class GroupsViewController: UITableViewController {
     
     func loadGroupsFromRealm() {
             myGroups = Array(groupsFromRealm)
-            guard groupsFromRealm.count != 0 else { return } // проверка, что в реалме что-то есть
+            guard groupsFromRealm.count != 0 else { return }
             tableView.reloadData()
     }
     
     //MARK: - добавление новой группы из другого контроллера
     
     @IBAction func addGroup(segue:UIStoryboardSegue) {
-        // проверка по идентификатору верный ли переход с ячейки
         if segue.identifier == "AddGroup" {
-            // ссылка объект на контроллер с которого переход
             guard let newGroupFromController = segue.source as? NewGroupsTableViewController else {return}
-            // проверка индекса ячейки
             if let indexPath = newGroupFromController.tableView.indexPathForSelectedRow {
-                //добавить новой группы в мои группы из общего списка групп
                 let newGroup = newGroupFromController.GroupsList[indexPath.row]
-                // проверка что группа уже в списке (нужен Equatable)
                 guard !myGroups.description.contains(newGroup.groupName) else {return}
                 myGroups.append(newGroup)
                 
@@ -144,22 +129,16 @@ class GroupsViewController: UITableViewController {
     //MARK: - Firebase
     
     private func writeNewGroupToFirebase(_ newGroup: Group){
-        // работаем с Firebase
         let database = Database.database()
-        // путь к нужному пользователю в Firebase (тот кто залогинился уже есть базе, другие не интересны)
         let ref: DatabaseReference = database.reference(withPath: "All logged users").child(String(Session.shared.userId))
         
-        // чтение из Firebase
         ref.observe(.value) { snapshot in
             
             let groupsIDs = snapshot.children.compactMap { $0 as? DataSnapshot }
                 .compactMap { $0.key }
-            
-            // проверка есть ли ID группы в Firebase
             guard groupsIDs.contains(String(newGroup.id)) == false else { return }
     
-            //ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходило изменений при изменении базы
-            ref.child(String(newGroup.id)).setValue(newGroup.groupName) // записываем новую группу в Firebase
+            ref.child(String(newGroup.id)).setValue(newGroup.groupName)
             
             print("Для пользователя с ID: \(String(Session.shared.userId)) в Firebase записана группа:\n\(newGroup.groupName)")
             
@@ -167,7 +146,7 @@ class GroupsViewController: UITableViewController {
             .compactMap { $0.value }
             
             print("\nРанее добавленные в Firebase группы пользователя с ID \(String(Session.shared.userId)):\n\(groups)")
-            ref.removeAllObservers() // отписываемся от уведомлений, чтобы не происходило изменений при записи в базу
+            ref.removeAllObservers() 
         }
     }
     

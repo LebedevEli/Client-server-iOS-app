@@ -22,9 +22,6 @@ struct FriendsResponse: Decodable {
             var avatar: String
             var deactivated: String?
             
-            // enum и init нужны если нужно иметь другие названия переменных в отличии от даннных в json
-            // например: logo = "photo_50" (я хочу: logo, а в jsone это: photo_50 )
-            // но все равно нужно указать другие значения, например: id (без уточнения)
             private enum CodingKeys: String, CodingKey {
                 case id
                 case firstName = "first_name"
@@ -41,7 +38,6 @@ struct FriendsResponse: Decodable {
                 lastName = try container.decode(String.self, forKey: .lastName)
                 avatar = try container.decode(String.self, forKey: .avatar)
                 
-                // необязательный ключ (может отсутсвовать)
                 deactivated = try? container.decodeIfPresent(String.self, forKey: .deactivated)
             }
         }
@@ -50,15 +46,13 @@ struct FriendsResponse: Decodable {
 
 class GetFriendsList {
     
-    //данные для авторизации в ВК
     func loadData() {
         
-        // Конфигурация по умолчанию
         let configuration = URLSessionConfiguration.default
-        // собственная сессия
+        
         let session =  URLSession(configuration: configuration)
         
-        // конструктор для URL
+        
         var urlConstructor = URLComponents()
         urlConstructor.scheme = "https"
         urlConstructor.host = "api.vk.com"
@@ -70,18 +64,15 @@ class GetFriendsList {
             URLQueryItem(name: "v", value: "5.131")
         ]
         
-        // задача для запуска
         let task = session.dataTask(with: urlConstructor.url!) { (data, response, error) in
-            //print("Запрос к API: \(urlConstructor.url!)")
             
-            // в замыкании данные, полученные от сервера, мы преобразуем в json
             guard let data = data else { return }
             
             do {
                 let arrayFriends = try JSONDecoder().decode(FriendsResponse.self, from: data)
                 var friendList: [Friend] = []
                 for i in 0...arrayFriends.response.items.count-1 {
-                    // не отображаем удаленных и заблокированных друзей
+                    
                     if arrayFriends.response.items[i].deactivated == nil {
                         let name = ((arrayFriends.response.items[i].firstName) + " " + (arrayFriends.response.items[i].lastName))
                         let avatar = arrayFriends.response.items[i].avatar

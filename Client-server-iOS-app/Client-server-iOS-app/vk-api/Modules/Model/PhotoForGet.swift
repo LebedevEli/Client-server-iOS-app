@@ -16,8 +16,6 @@ class Photo: Object {
         self.photo = photo
         self.ownerID = ownerID
     }
-    
-    // этот инит обязателен для Object
     required override init() {
         super.init()
     }
