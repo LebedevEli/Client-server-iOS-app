@@ -17,6 +17,8 @@ class NewGroupsTableViewController: UITableViewController, UISearchResultsUpdati
     var searchController:UISearchController!
     var GroupsList: [Group] = []
     
+    lazy var imageCache = ImageCache(container: self.tableView)
+    
     // MARK: - Functions
     
     func setupSearchBar() {
@@ -59,9 +61,12 @@ class NewGroupsTableViewController: UITableViewController, UISearchResultsUpdati
 
         cell.nameNewGroupLabel.text = GroupsList[indexPath.row].groupName
         
-        if let imgUrl = URL(string: GroupsList[indexPath.row].groupLogo) {
-            cell.avatarNewGroup.avatarImage.load(url: imgUrl)
-        }
+//        if let imgUrl = URL(string: GroupsList[indexPath.row].groupLogo) {
+//            cell.avatarNewGroup.avatarImage.load(url: imgUrl)
+//        }
+        
+        let imgUrl = GroupsList[indexPath.row].groupLogo
+        cell.avatarNewGroup.avatarImage.image = imageCache.getPhoto(at: indexPath, url: imgUrl)
 
         return cell
     }

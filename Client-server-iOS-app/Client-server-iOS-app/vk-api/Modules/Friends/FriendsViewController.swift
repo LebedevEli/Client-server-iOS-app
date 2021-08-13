@@ -23,7 +23,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         tableView.refreshControl = myRefreshControl
         super.viewDidLoad()
         
-        subNotificationRealm() // подписываемся на уведомления realm
+        subNotificationRealm() 
         
 //        loadFriendsFromRealm() // загрузка данных из реалма (кэш) для первоначального отображения
 //        GetFriendsList().loadData()
@@ -96,9 +96,13 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsCell", for: indexPath) as! FriendsTableViewCell
         
-        cell.nameFriend.text = self.getNameFriendForCell(indexPath)
+        let friendInfo = getFriendInfoForCell(indexPath)
         
-        guard let imgUrl = self.getAvatarFriendForCell(indexPath) else { return cell }
+        cell.nameFriend.text = friendInfo.name
+        
+//        cell.nameFriend.text = self.getNameFriendForCell(indexPath)
+        
+        guard let imgUrl = friendInfo.avatar else { return cell }
             let avatar = ImageResource(downloadURL: imgUrl)
         cell.avatarView.avatarImage.kf.indicatorType = .activity
         cell.avatarView.avatarImage.kf.setImage(with: avatar)
@@ -108,6 +112,8 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! FriendsTableViewCell
+        cell.nameFriend.backgroundColor = cell.backgroundColor
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -129,7 +135,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     
     func loadFriendsFromRealm() {
         
-        friendsList = Array(friendsFromRealm)
+        friendsList = Array(friendsFromRealm).sorted{ $0.userName < $1.userName }
         guard friendsList.count != 0 else {return}
         makeNamesList()
         sortCharacterOfNamesAlphabet()
@@ -155,36 +161,53 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
-    func getNameFriendForCell(_ indexPath: IndexPath) -> String {
-        var namesRows = [String]()
-        for name in namesListModifed.sorted() {
-            if letersOfNames[indexPath.section].contains(name.first!) {
-                namesRows.append(name)
+    func getFriendInfoForCell(_ indexPath: IndexPath) -> (name: String, avatar: URL?, ownerID: String) {
+        var friendInfo: [(name: String, avatar: URL?, ownerID: String)] = []
+        let letter = letersOfNames[indexPath.section]
+        
+        for friend in friendsList {
+            if letter.contains(friend.userName.first!){
+                let name = friend.userName
+                let avatar = URL(string: friend.userAvatar)
+                let ownerID = friend.ownerID
+                
+                friendInfo.append((name, avatar, ownerID))
             }
         }
-        return namesRows[indexPath.row]
+        
+        return friendInfo[indexPath.row]
     }
     
-    func getAvatarFriendForCell(_ indexPath: IndexPath) -> URL? {
-        for friend in friendsList {
-            let namesRows = getNameFriendForCell(indexPath)
-            if friend.userName.contains(namesRows) {
-                return URL(string: friend.userAvatar)
-            }
-        }
-        return nil
-    }
-    
-    func getIDFriend(_ indexPath: IndexPath) -> String {
-        var ownerIDs = ""
-        for friend in friendsList {
-            let namesRows = getNameFriendForCell(indexPath)
-            if friend.userName.contains(namesRows) {
-                ownerIDs = friend.ownerID
-            }
-        }
-        return ownerIDs
-    }
+//    func getNameFriendForCell(_ indexPath: IndexPath) -> String {
+//        var namesRows = [String]()
+//        for name in namesListModifed.sorted() {
+//            if letersOfNames[indexPath.section].contains(name.first!) {
+//                namesRows.append(name)
+//            }
+//        }
+//        return namesRows[indexPath.row]
+//    }
+//
+//    func getAvatarFriendForCell(_ indexPath: IndexPath) -> URL? {
+//        for friend in friendsList {
+//            let namesRows = getNameFriendForCell(indexPath)
+//            if friend.userName.contains(namesRows) {
+//                return URL(string: friend.userAvatar)
+//            }
+//        }
+//        return nil
+//    }
+//
+//    func getIDFriend(_ indexPath: IndexPath) -> String {
+//        var ownerIDs = ""
+//        for friend in friendsList {
+//            let namesRows = getNameFriendForCell(indexPath)
+//            if friend.userName.contains(namesRows) {
+//                ownerIDs = friend.ownerID
+//            }
+//        }
+//        return ownerIDs
+//    }
     //MARK: - рефреш контрол (обновление страницы)
     @objc private func refresh(sender: UIRefreshControl) {
         sender.endRefreshing()
@@ -223,8 +246,9 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             guard let friend = segue.destination as? PhotoCollectionViewController else { return }
 
             if let indexPath = tableView.indexPathForSelectedRow {
-                friend.title = getNameFriendForCell(indexPath)
-                friend.ownerID = getIDFriend(indexPath)
+                let friendInfo = getFriendInfoForCell(indexPath)
+                friend.title = friendInfo.name
+                friend.ownerID = friendInfo.ownerID
             }
         }
     }

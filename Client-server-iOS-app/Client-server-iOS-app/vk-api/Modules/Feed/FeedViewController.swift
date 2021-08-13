@@ -12,13 +12,21 @@ class FeedViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        GetNewsList().loadData { complition in
-            DispatchQueue.main.async {
-                self.postNewsList = complition
-                self.tableView.reloadData()
-            }
+//        GetNewsList().loadData { complition in
+//            DispatchQueue.main.async {
+//                self.postNewsList = complition
+//                self.tableView.reloadData()
+//            }
+//        }
+        getNewsListSwiftyJSON.get { [weak self] (complition) in
+            self?.postNewsList = complition
+            self?.tableView.reloadData()
         }
+        
     }
+    
+    lazy var getNewsListSwiftyJSON = GetNewsListSwiftyJSON()
+    lazy var imageCache = ImageCache(container: self.tableView)
   
     var postNewsList: [PostNews] = []
 
@@ -40,8 +48,10 @@ class FeedViewController: UITableViewController {
         
         let  cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! FeedTableViewCell
         
-        guard let avatarUrl = URL(string: postNewsList[indexPath.row].avatar ) else { return cell }
-        cell.avatarUserFeed.avatarImage.load(url: avatarUrl)
+//        guard let avatarUrl = URL(string: postNewsList[indexPath.row].avatar ) else { return cell }
+//        cell.avatarUserFeed.avatarImage.load(url: avatarUrl)
+        
+        cell.avatarUserFeed.avatarImage.image = imageCache.getPhoto(at: indexPath, url: postNewsList[indexPath.row].avatar)
         
         cell.nameUserFeed.text = postNewsList[indexPath.row].name
         

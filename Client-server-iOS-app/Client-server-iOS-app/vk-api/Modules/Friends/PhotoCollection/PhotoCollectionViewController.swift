@@ -14,7 +14,8 @@ class PhotoCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadPhotosFromRealm()
+        
+        subNotificationRealm()
         GetPhotosFriend().loadData(ownerID)
     }
     
@@ -33,6 +34,8 @@ class PhotoCollectionViewController: UICollectionViewController {
     var ownerID = ""
     var collectionPhotos: [Photo] = []
     
+    lazy var imageCache = ImageCache(container: self.collectionView)
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionPhotos.count
     }
@@ -40,11 +43,13 @@ class PhotoCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotosFriendCell", for: indexPath) as! PhotoCollectionViewCell
         
-        if let imgUrl = URL(string: collectionPhotos[indexPath.row].photo) {
-            let photo = ImageResource(downloadURL: imgUrl)
-            cell.friendPhotoImage.kf.setImage(with: photo)
-            
-        }
+//        if let imgUrl = URL(string: collectionPhotos[indexPath.row].photo) {
+//            let photo = ImageResource(downloadURL: imgUrl)
+//            cell.friendPhotoImage.kf.setImage(with: photo)
+//
+//        }
+        let imgUrl = collectionPhotos[indexPath.row].photo
+        cell.friendPhotoImage.image = imageCache.getPhoto(at: indexPath, url: imgUrl)
         
         return cell
     }
@@ -63,6 +68,8 @@ class PhotoCollectionViewController: UICollectionViewController {
             }
         })
     }
+    
+    
     
     func loadPhotosFromRealm() {
         collectionPhotos = Array(photosFromRealm)

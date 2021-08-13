@@ -13,13 +13,13 @@ class RealmOperations {
     func saveFriendsToRealm(_ friendList: [Friend]) {
         do {
             let realm = try Realm()
-            try realm.write{
+            try realm.write {
                 let oldFriendList = realm.objects(Friend.self)
                 realm.delete(oldFriendList)
                 realm.add(friendList)
             }
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
     
@@ -32,31 +32,31 @@ class RealmOperations {
                 realm.add(photoList)
             }
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
         
     func saveGroupsToRealm(_ groupList: [Group]) {
         do {
             let realm = try Realm()
-            try realm.write{
+            try realm.write {
                 let oldGroupList = realm.objects(Group.self)
                 realm.delete(oldGroupList)
                 realm.add(groupList)
             }
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
     
     func deleteAllFromRealm() {
         do {
             let realm = try Realm()
-            try realm.write{
+            try realm.write {
                 realm.deleteAll()
             }
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
     
