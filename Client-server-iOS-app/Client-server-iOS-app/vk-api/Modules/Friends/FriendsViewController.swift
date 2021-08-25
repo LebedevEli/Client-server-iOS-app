@@ -177,37 +177,6 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         return friendInfo[indexPath.row]
     }
-    
-//    func getNameFriendForCell(_ indexPath: IndexPath) -> String {
-//        var namesRows = [String]()
-//        for name in namesListModifed.sorted() {
-//            if letersOfNames[indexPath.section].contains(name.first!) {
-//                namesRows.append(name)
-//            }
-//        }
-//        return namesRows[indexPath.row]
-//    }
-//
-//    func getAvatarFriendForCell(_ indexPath: IndexPath) -> URL? {
-//        for friend in friendsList {
-//            let namesRows = getNameFriendForCell(indexPath)
-//            if friend.userName.contains(namesRows) {
-//                return URL(string: friend.userAvatar)
-//            }
-//        }
-//        return nil
-//    }
-//
-//    func getIDFriend(_ indexPath: IndexPath) -> String {
-//        var ownerIDs = ""
-//        for friend in friendsList {
-//            let namesRows = getNameFriendForCell(indexPath)
-//            if friend.userName.contains(namesRows) {
-//                ownerIDs = friend.ownerID
-//            }
-//        }
-//        return ownerIDs
-//    }
     //MARK: - рефреш контрол (обновление страницы)
     @objc private func refresh(sender: UIRefreshControl) {
         sender.endRefreshing()

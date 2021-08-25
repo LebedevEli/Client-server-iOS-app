@@ -150,7 +150,6 @@ class GetNewsList {
             URLQueryItem(name: "owner_id", value: String(Session.shared.userId)),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "filters", value: "post,photo"),
-            URLQueryItem(name: "count", value: "10"),
             URLQueryItem(name: "v", value: "5.131")
         ]
               
@@ -202,7 +201,7 @@ class GetNewsList {
                         }
                     }
                     
-                    newsList.append(PostNews(name: name, avatar: avatar, date: strDate, textNews: text, imageNews: urlImg, likes: likes, comments: comments, reposts: reposts, views: views))
+                    newsList.append(PostNews(name: name, avatar: avatar, date: strDate, textNews: text, imageNews: urlImg, aspectRatio: 1, likes: likes, comments: comments, reposts: reposts, views: views))
                 }
                 
                 return complition(newsList)

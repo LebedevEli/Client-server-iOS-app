@@ -18,4 +18,32 @@ class FeedTableViewCell: UITableViewCell {
     @IBOutlet weak var commentsCount: UIButton!
     @IBOutlet weak var repostsCount: UIButton!
     @IBOutlet weak var viewsCount: UIButton!
+    @IBOutlet weak var showMore: UIButton!
+    
+    
+    @IBAction func showMore(_ sender: Any) {
+        let size = textNewsPost.frame.size.height
+        if size <= 200.5 {
+            textNewsPost.adjustUITextViewHeightToFit()
+            showMore.setTitle("Показать меньше...", for: .normal)
+        } else {
+            textNewsPost.adjustUITextViewHeightToDefault()
+            showMore.setTitle("Показать польностью...", for: .normal)
+        }
+    }
+    func resetStateButtonShowMore() {
+        showMore.isHidden = false
+        showMore.setTitle("Показать польностью...", for: .normal)
+    }
+}
+
+extension UITextView {
+    func adjustUITextViewHeightToFit() {
+        self.translatesAutoresizingMaskIntoConstraints = true
+        self.sizeToFit()
+    }
+    
+    func adjustUITextViewHeightToDefault() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+    }
 }

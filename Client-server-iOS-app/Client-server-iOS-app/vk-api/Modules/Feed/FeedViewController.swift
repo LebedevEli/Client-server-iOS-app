@@ -7,10 +7,14 @@
 
 import UIKit
 
-class FeedViewController: UITableViewController {
+class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        addRefreshControl()
+        tableView.prefetchDataSource = self
+        loadNews()
         
 //        GetNewsList().loadData { complition in
 //            DispatchQueue.main.async {
@@ -18,17 +22,60 @@ class FeedViewController: UITableViewController {
 //                self.tableView.reloadData()
 //            }
 //        }
-        getNewsListSwiftyJSON.get { [weak self] (complition) in
-            self?.postNewsList = complition
-            self?.tableView.reloadData()
-        }
+//
+//        getNewsListSwiftyJSON.get { [weak self] (complition) in
+//            self?.postNewsList = complition
+//            self?.tableView.reloadData()
+//        }
         
     }
     
     lazy var getNewsListSwiftyJSON = GetNewsListSwiftyJSON()
     lazy var imageCache = ImageCache(container: self.tableView)
-  
     var postNewsList: [PostNews] = []
+    
+    var nextNewsID = ""
+    var isLoadingNews = false
+    
+    let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        return df
+    }()
+    //MARK: - News loading
+    
+    func loadNews() {
+        getNewsListSwiftyJSON.get { [weak self] (news, nextFromID) in
+            guard let self = self else {return}
+            self.postNewsList = news
+            self.nextNewsID = nextFromID
+            self.tableView.reloadData()
+        }
+    }
+    
+    private func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string: "Новости загружаются")
+        refreshControl?.tintColor = .gray
+        refreshControl?.addTarget(self, action: #selector(refreshNewsList), for: .valueChanged)
+    }
+    
+    @objc private func refreshNewsList() {
+        if let dateFrom = postNewsList.first?.date {
+            let timestamp = dateFormatter.date(from: dateFrom)?.timeIntervalSince1970 ?? Date().timeIntervalSince1970
+            
+            getNewsListSwiftyJSON.get(newsFrom: timestamp + 1) { [weak self] (latesNews, _)  in
+                guard let self = self else {return}
+                guard latesNews.count > 0 else {return}
+                self.postNewsList = latesNews + self.postNewsList
+                
+                let indexPaths = (0..<latesNews.count)
+                    .map{ IndexPath(row: $0, section: 0)}
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
+            }
+        }
+        self.refreshControl?.endRefreshing()
+    }
 
     // MARK: - Table view data source
     
@@ -76,8 +123,51 @@ class FeedViewController: UITableViewController {
         
         cell.viewsCount.setTitle(String(postNewsList[indexPath.row].views), for: .normal)
         
-
+        if identifier == "PostCell" {
+            cell.textNewsPost.text = postNewsList[indexPath.row].textNews
+            cell.resetStateButtonShowMore()
+            
+            cell.textNewsPost.sizeToFit()
+            let heightTextView = cell.textNewsPost.frame.size.height
+            
+            if heightTextView > 200.5 {
+                cell.textNewsPost.adjustUITextViewHeightToDefault()
+                cell.showMore.setTitle("Показать полностью", for: .normal)
+            } else {
+                cell.showMore.isHidden = true
+            }
+        }
+        
+        guard let imgUrl = URL(string: postNewsList[indexPath.row].imageNews) else {return cell}
+        cell.imgNews.image = UIImage(systemName: "icloud.and.arrow.down")
+        cell.imgNews.load(url: imgUrl)
+        
         return cell
+    }
+    
+    //MARK: - бесконечный скролл
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard
+            isLoadingNews == false,
+        let maxRow = indexPaths.map ({ $0.row }).max(),
+            maxRow > (postNewsList.count - 3)
+        else {return}
+        
+        isLoadingNews = true
+        
+        getNewsListSwiftyJSON.get(nextPageNews: nextNewsID) { [weak self] (nextNews, nextFromID) in
+            guard let self = self else {return}
+            let newsCount = self.postNewsList.count
+            self.postNewsList.append(contentsOf: nextNews)
+            
+            let indexPaths = (newsCount..<(newsCount + nextNews.count))
+                .map {IndexPath(row: $0, section: 0)}
+            
+            self.tableView.insertRows(at: indexPaths, with: .automatic)
+            self.nextNewsID = nextFromID
+            self.isLoadingNews = false
+        }
     }
 
 }

@@ -13,6 +13,7 @@ struct PostNews {
     var date: String
     var textNews: String
     var imageNews: String
+    var aspectRatio: CGFloat
     var likes: Int
     var comments: Int
     var reposts: Int
